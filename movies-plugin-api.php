@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:Movies Plugin API
+ * Plugin Name:Movies-plugin-api
  * Versio:0.0.1
  */
 
@@ -9,14 +9,15 @@ register_activation_hook(__FILE__,'wp_movies_api_table');
 Function wp_movies_api_table(){
     global $wpdb;
     $table_name=$wpdb->prefix.'movies';
-    $sql='CREATE TABLE $table_name(
-        id meduimint(9) NOT NULL AUTO_INCREMENT,
+    $sql="CREATE TABLE $table_name (
+        id int(9) NOT NULL AUTO_INCREMENT,
         title VARCHAR(100) NOT NULL,
-        image_data IMAGE,
-        PRIMARY KEY (id)
-    )';
-
+        image_data VARCHAR(255),
+        PRIMARY KEY  (id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;"; 
+require_once ABSPATH . '/wp-admin/includes/upgrade.php';
 dbDelta($sql);
+//$wpdb->query($sql);
     
 }
 add_action('rest_api_init','movies_register_routes');
@@ -29,13 +30,13 @@ function movies_register_routes(){
             'callback'=>'movies-get-form-submission',
             'permission_callback'=>'__return_true'
         )
-    )
+        );
 }
 
 
-function movies-get-form-submission(){
+function movies_get_form_submission(){
     global $wpdb;
-    $table_name=$wpdb->prefix.'form_submission';
+    $table_name=$wpdb->prefix.'movies';
     $results=$wpdb->get_results('SELECT * FROM $table_name');
     return $results;
 }

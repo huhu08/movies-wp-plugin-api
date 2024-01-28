@@ -23,23 +23,22 @@ dbDelta($sql);
 add_action('rest_api_init','movies_register_routes');
 function movies_register_routes(){
     register_rest_route(
-        'movies-form-submission-api-v1',
-        '/form-submissions/',
+        'movies-api/v1',
+        '/movies/',
         array(
             'method'=>'GET',
-            'callback'=>'movies-get-form-submission',
+            'callback'=>'movies_get',
             'permission_callback'=>'__return_true'
         )
         );
 }
 
 
-function movies_get_form_submission(){
+function movies_get(){
     global $wpdb;
     $table_name=$wpdb->prefix.'movies';
     $results=$wpdb->get_results('SELECT * FROM $table_name');
     return $results;
 }
-
 
 ?>
